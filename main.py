@@ -47,8 +47,27 @@ def calculate_distance(sequences):
 
 
 def matrix_relations(matrix):
-    print(matrix)
+    size = len(matrix)
+    matrix_indices = np.triu_indices(size, 1) # return 2 arrays with x and y coordinates
+    for index in range(len(matrix_indices[0])): # run this loop as many times as there are items in the x list
+        x = matrix_indices[0][index] # [0] --> the x array ; [index] --> specific x value
+        y = matrix_indices[1][index] # [1] --> the y array ; [index] --> specific y value
+        value_matrix = matrix[x][y]
+        print(f'x:{x} Y:{y}')
+        print(matrix[x][y])
+    # for x in matrix_indices[0]:
+    #     for y in matrix_indices[1]:
+    #         print(f'x:{x} Y:{y}')
+    #         print(matrix[x][y])
 
+    #triu_matrix = np.triu(matrix) #returns array with only upper right triangle
+    # https: // numpy.org / doc / stable / reference / generated / numpy.triu.html  # numpy.triu
+    #matrix = np.triu_indices
+    # https: // numpy.org / doc / stable / reference / generated / numpy.triu_indices.html --> Upper Triangle
+    #min_value = np.min(triu_matrix)
+    # print(matrix_indices)
+    # print(matrix)
+    # print(matrix_changed)
 
 
 
