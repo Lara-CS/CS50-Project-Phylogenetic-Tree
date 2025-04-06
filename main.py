@@ -34,18 +34,16 @@ def calculate_distance(sequences):
 
     for ref_seq in range(n_sequences - 1):  # iterates over sequences until n-1
 
-        print("Sequence Index: " + str(
-            ref_seq))  # indicates index of current REFERENCE sequence (sequence_1 in hamming_distance())
+        # print("Sequence Index: " + str(ref_seq))  # indicates index of current REFERENCE sequence (sequence_1 in hamming_distance())
         for remaining in range(1, n_sequences - ref_seq):  # the amount of remaining iterations (remaining) == n_sequences - ref_seq
             query_seq = ref_seq + remaining  # query_seq is the index number of the sequence to be compared to the reference sequence
-            print("Query Sequence: " + str(query_seq))  # indicates index of current query sequence (sequence_2 in hamming_distance())
+            # print("Query Sequence: " + str(query_seq))  # indicates index of current query sequence (sequence_2 in hamming_distance())
             hamming_distance = hamming_formula(sequences[ref_seq], sequences[query_seq])
 
             distances_matrix[ref_seq][query_seq] = (hamming_distance / len(sequences[ref_seq]))  # upper right triangle #normalization via /len(sequences[ref_seq]
             distances_matrix[query_seq][ref_seq] = (hamming_distance / len(sequences[ref_seq]))  # bottom left triangle (inverse)
 
-    matrix_relations(
-        distances_matrix)  # calculate_distances() returns distances_matrix, inserts distances_matrix value into matrix_relations parameter
+    matrix_relations(distances_matrix)  # calculate_distances() returns distances_matrix, inserts distances_matrix value into matrix_relations parameter
 
 
 def matrix_relations(matrix):
