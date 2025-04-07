@@ -11,7 +11,12 @@ def main():
     sequence = []
     for file in files:
         sequence += [str(read_seq(file))]
-    calculate_distance(sequence)
+    distances_matrix = calculate_distance(sequence)
+    condensed_matrix = condensation(distances_matrix)
+    cluster = clustering(condensed_matrix)
+    print(cluster)
+    output(cluster)
+
 
 def read_seq(fasta_path):
     # opens a FASTA file and returns sequence
@@ -20,16 +25,18 @@ def read_seq(fasta_path):
             return record.seq
 
 
-def condensation(matrix):
-    condensed_matrix = squareform(matrix)
-    clustering(condensed_matrix)
+def condensation(distances_matrix):
+    condensed_matrix = squareform(distances_matrix)
+    return condensed_matrix
 
+def clustering(condensed_matrix):
+    cluster = linkage(condensed_matrix, method= 'average') # average --> UPGMA clustering
+    return cluster
 
-def clustering(matrix):
-    cluster = linkage(matrix, method= 'average') # average --> UPGMA clustering
+def output(cluster):
     fig = plt.figure(figsize=(25, 10))
     plt.title("Phylogenetic Tree of Sequences")
-    dn = dendrogram(cluster) # to be added: parameter --> labels=sequence_name
+    dn = dendrogram(cluster, orientation='left') # to be added: parameter --> labels=sequence_name
     plt.show()
 
 
@@ -48,8 +55,7 @@ def calculate_distance(sequences):
             distances_matrix[ref_seq][query_seq] = (hamming_distance / len(sequences[ref_seq]))  # upper right triangle #normalization via /len(sequences[ref_seq]
             distances_matrix[query_seq][ref_seq] = (hamming_distance / len(sequences[ref_seq]))  # bottom left triangle (inverse)
 
-    condensation(distances_matrix)
-
+    return distances_matrix
 
 def hamming_formula(sequence_1, sequence_2):  # pair-wise comparison for hamming distance
     if len(sequence_1) != len(sequence_2):
