@@ -10,7 +10,12 @@ def main():
     files = sys.argv[1:]
     sequence = []
     for file in files:
-        sequence += [str(read_seq(file))]
+        try:
+            sequence += [str(read_seq(file))]
+        except TypeError:
+            sys.exit("A non-FASTA file was entered for analysis.")
+        except FileNotFoundError:
+            sys.exit("An invalid file name was entered, or an unavailable file was entered for analysis")
     distances_matrix = calculate_distance(sequence)
     condensed_matrix = condensation(distances_matrix)
     cluster = clustering(condensed_matrix)
@@ -20,6 +25,8 @@ def main():
 
 def read_seq(fasta_path):
     # opens a FASTA file and returns sequence
+    if not fasta_path.endswith((".fasta", ".fas", ".fa", ".fna", ".ffn", ".faa", ".mpfa", ".frn")):
+        raise TypeError()
     with open(fasta_path) as handle:
         for record in SeqIO.parse(handle, "fasta"):
             return record.seq
@@ -29,9 +36,11 @@ def condensation(distances_matrix):
     condensed_matrix = squareform(distances_matrix)
     return condensed_matrix
 
+
 def clustering(condensed_matrix):
     cluster = linkage(condensed_matrix, method= 'average') # average --> UPGMA clustering
     return cluster
+
 
 def output(cluster):
     fig = plt.figure(figsize=(25, 10))
@@ -57,6 +66,7 @@ def calculate_distance(sequences):
 
     return distances_matrix
 
+
 def hamming_formula(sequence_1, sequence_2):  # pair-wise comparison for hamming distance
     if len(sequence_1) != len(sequence_2):
         raise ValueError("Sequences must be of equal length.")
@@ -65,6 +75,7 @@ def hamming_formula(sequence_1, sequence_2):  # pair-wise comparison for hamming
         if sequence_1[n] != sequence_2[n]:
             d_min += 1
     return d_min
+
 
 if __name__ == "__main__":
     main()
