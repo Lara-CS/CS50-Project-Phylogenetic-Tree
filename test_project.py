@@ -25,4 +25,4 @@ def test_main():
     with pytest.raises(FileNotFoundError):
         str(read_seq("./test-data/test5.fna"))
 
-#how to make tests work with other test files
+
